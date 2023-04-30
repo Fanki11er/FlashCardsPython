@@ -1,17 +1,19 @@
 const endpoints = {
-  baseURL: "https://localhost:8000",
-  registerEndpoint: "/account/register",
-  loginEndpoint: "/account/login",
-  refreshEndpoint: "/Refresh",
-  statusEndpoint: "/FlashCards/Status",
-  createFlashCardEndpoint: "/FlashCards/Create",
-  learnEndpoint: "/FlashCards/Learn/Portion",
-  updateLearnedFlashCardEndpoint: "/FlashCards/Learn/Update",
-  allFlashCards: "/FlashCards/GetAll",
-  flashCardEditEndpoint: "/FlashCards/Edit",
-  deleteFlashCardEndpoint: "/FlashCards/Delete",
+  baseURL: "http://localhost:8000",
+  registerEndpoint: "/auth/register/",
+  loginEndpoint: "/auth/login/",
+  refreshToken: "/login/refresh/",
+  statusEndpoint: "/flashcards/Status/",
+  getUser: "/me/",
+  //Not tested
+  createFlashCardEndpoint: "/flashcards/Create/",
+  learnEndpoint: "/flashcards/Learn/",
+  allFlashCards: "/flashcards/All/",
+  // Probably for change
+  flashCardEditEndpoint: "/flashcards/Update/",
   settingsEndpoint: "/account/Settings",
-  refreshToken: "",
+  deleteFlashCardEndpoint: "/flashcards/Delete",
+  updateLearnedFlashCardEndpoint: "/FlashCards/Learn/Update",
 };
 
 export default endpoints;

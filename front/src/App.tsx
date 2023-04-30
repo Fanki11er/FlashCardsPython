@@ -6,6 +6,7 @@ import { theme } from "./Theme/theme";
 import AuthProvider from "./Providers/AuthProvider";
 import { RouterProvider } from "react-router-dom";
 import router from "./Routes/router";
+import UserProvider from "./Providers/UserProvider";
 
 const App = () => {
   return (
@@ -13,7 +14,9 @@ const App = () => {
       <GlobalStyle />
       <ThemeProvider theme={theme}>
         <AuthProvider>
-          <RouterProvider router={router} />
+          <UserProvider>
+            <RouterProvider router={router} />
+          </UserProvider>
         </AuthProvider>
       </ThemeProvider>
     </>

@@ -36,10 +36,3 @@ const router = createBrowserRouter(
 );
 
 export default router;
-/*
- <Route element={<MainTemplate />}>
-      <Route path={main} element={<Main />} />
-      <Route path={views} element={<Views />} />
-      <Route path="*" element={<NotFound />} />
-    </Route>
-*/
