@@ -1,6 +1,6 @@
 from User.models import UserSettings
 from rest_framework import serializers
-from User.models import User
+from User.models import User, Status
 
 
 class MeSerializer(serializers.ModelSerializer):
@@ -11,3 +11,10 @@ class MeSerializer(serializers.ModelSerializer):
 
     def get_username(self, obj):
         return obj
+    
+class StatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Status
+        fields = ('all_flashcards', 'new_flashcards','to_learn_flashcards')
+
+  
