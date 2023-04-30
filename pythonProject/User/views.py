@@ -1,5 +1,4 @@
 from rest_framework import generics
-#from django.contrib.auth.models import User
 from .serializers import MeSerializer
 from User.models import User
 

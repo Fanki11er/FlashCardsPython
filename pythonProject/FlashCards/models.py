@@ -1,8 +1,6 @@
 from django.db import models
-#from django.contrib.auth.models import User
 from User.models import User
-
-from django.utils import timezone
+import datetime
 
 
 STATUSES = (
@@ -11,11 +9,11 @@ STATUSES = (
 )
 
 class FlashCard(models.Model):
-    front_text = models.CharField(max_length= 255)
-    back_text = models.CharField(max_length= 255)
+    front_text = models.CharField(max_length= 255, unique=True)
+    back_text = models.CharField(max_length= 255, unique=True)
     status = models.CharField(choices=(STATUSES), default='NEW', max_length=15)
-    correct_at_row = models.PositiveIntegerField()
-    next_session = models.DateField(default=timezone.now)
-    user = models.ManyToOneRel(User, on_delete=models.CASCADE, to=User, field_name="flashcards")
+    correct_at_row = models.PositiveIntegerField( default=0)
+    next_session = models.DateField(default=datetime.date.today)
+    user = models.ForeignKey(User, on_delete=models.CASCADE )
 
 

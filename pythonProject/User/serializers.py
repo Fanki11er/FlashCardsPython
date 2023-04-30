@@ -5,8 +5,6 @@ from User.models import User
 
 class MeSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField()
-    #user_settings = serializers.PrimaryKeyRelatedField(many=True, queryset=UserSettings.objects.all())
-
     class Meta:
         model = User
         fields = ('username',)

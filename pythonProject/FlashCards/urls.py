@@ -1,13 +1,11 @@
-from rest_framework import routers
-from django.urls import include, path
-from .views import  FlashCardViewSet
-
-#router = routers.DefaultRouter()
-#router.register(r'flashcards', FlashCardViewSet)
-#router .register(r'usersettings', UserSettingsViewSet)
+from django.urls import path
+from .views import apiOverview, flashcardsList, createFlashcard, updateFlashcard, deleteFlashcard, checkAnswer
 
 urlpatterns = [
-    path('', FlashCardViewSet.as_view({'get': 'list'}))
-    #path('', include(router.urls)),
-    #path('api-auth', include('rest_framework.urls', namespace = 'rest_framework'))
+    path("api/", apiOverview, name='api_overview'),
+    path("All/", flashcardsList, name='flashcards-list'),
+    path("Create/", createFlashcard, name='flashcards-create'),
+    path("Update/<str:pk>/", updateFlashcard, name='flashcards-update'),
+    path("Delete/<str:pk>/", deleteFlashcard, name='flashcards-delete'),
+    path("Check/<str:pk>/", checkAnswer, name='flashcards-check')
 ]
