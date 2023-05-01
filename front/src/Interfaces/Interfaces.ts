@@ -15,6 +15,11 @@ export interface FlashCardsStatus {
   toLearnAmount: number;
   newAmount: number;
 }
+export interface FlashCardsStatusDto {
+  all_flashcards: number;
+  to_learn_flashcards: number;
+  new_flashcards: number;
+}
 
 export interface FlashCard {
   id: number;
@@ -25,4 +30,13 @@ export interface FlashCard {
   correctAtRow: number;
 }
 
-export type Status = 'NEW' | 'LEARN' | 'OK';
+export interface FlashCardDto {
+  id: number;
+  front_text: string;
+  back_text: string;
+  status: Status;
+  next_Session: Date;
+  correct_at_row: number;
+}
+
+export type Status = "NEW" | "LEARN" | "LEARNT";

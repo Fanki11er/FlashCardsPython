@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import { FlashCard } from '../../../Interfaces/Interfaces';
-import { ArrowButton } from '../../Atoms/ArrowButton/ArrowButton';
-import { RefreshButton } from '../../Atoms/RefreshButton/RefreshButton';
-import { TextField } from '../../Atoms/TextField/TextField';
-import LearnAnswerForm from '../LearnAnswerForm/LearnAnswerForm';
+import { useEffect, useState } from "react";
+import { FlashCard } from "../../../Interfaces/Interfaces";
+import { ArrowButton } from "../../Atoms/ArrowButton/ArrowButton";
+import { RefreshButton } from "../../Atoms/RefreshButton/RefreshButton";
+import { TextField } from "../../Atoms/TextField/TextField";
+import LearnAnswerForm from "../LearnAnswerForm/LearnAnswerForm";
 import {
   BottomSection,
   FormWrapper,
@@ -14,7 +14,7 @@ import {
   StyledSpan,
   StyledTextField,
   StyledWrong,
-} from './LearnSection.styles';
+} from "./LearnSection.styles";
 
 interface Props {
   flashCardsToLearn: FlashCard[];
@@ -27,11 +27,14 @@ const LearningSection = (props: Props) => {
   const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean>(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
-  const [answer, setAnswer] = useState('');
+  const [answer, setAnswer] = useState("");
 
   const checkAnswer = (answer: string) => {
     setAnswer(answer);
-    if (answer.toLowerCase() === flashCardsToLearn[currentIndex].backText.toLowerCase()) {
+    if (
+      answer.toLowerCase() ===
+      flashCardsToLearn[currentIndex].backText.toLowerCase()
+    ) {
       setIsCorrectAnswer(true);
     } else {
       setIsCorrectAnswer(false);
@@ -43,16 +46,16 @@ const LearningSection = (props: Props) => {
     if (currentIndex < flashCardsToLearn.length - 1) {
       setCurrentIndex(currentIndex + 1);
       setIsAnswered(false);
-      setAnswer('');
+      setAnswer("");
     }
   };
 
   const changeFlashCardFields = (flashCard: FlashCard) => {
     if (isCorrectAnswer) {
-      flashCard.status = 'OK';
+      flashCard.status = "LEARNT";
       flashCard.correctAtRow = flashCard.correctAtRow + 1;
     } else {
-      flashCard.status = 'LEARN';
+      flashCard.status = "LEARN";
       flashCard.correctAtRow = 0;
     }
     return flashCard;
@@ -68,19 +71,32 @@ const LearningSection = (props: Props) => {
     <LearnSectionWrapper>
       {!isAnswered ? (
         <FormWrapper>
-          <TextField>{flashCardsToLearn.length > 0 ? flashCardsToLearn[currentIndex].frontText : ''}</TextField>
-          <LearnAnswerForm checkAnswer={checkAnswer} flashCards={flashCardsToLearn.length > 0} />
+          <TextField>
+            {flashCardsToLearn.length > 0
+              ? flashCardsToLearn[currentIndex].frontText
+              : ""}
+          </TextField>
+          <LearnAnswerForm
+            checkAnswer={checkAnswer}
+            flashCards={flashCardsToLearn.length > 0}
+          />
         </FormWrapper>
       ) : (
         <ResultWrapper>
-          <StyledTextField correct={isCorrectAnswer}>{flashCardsToLearn[currentIndex].backText}</StyledTextField>
+          <StyledTextField correct={isCorrectAnswer}>
+            {flashCardsToLearn[currentIndex].backText}
+          </StyledTextField>
           <StyledTextField correct={isCorrectAnswer}>{answer}</StyledTextField>
           {isCorrectAnswer ? <StyledCorrect /> : <StyledWrong />}
         </ResultWrapper>
       )}
 
       <BottomSection>
-        <StyledSpan>{flashCardsToLearn.length ? `${currentIndex + 1} / ${flashCardsToLearn.length}` : `0 / 0`}</StyledSpan>
+        <StyledSpan>
+          {flashCardsToLearn.length
+            ? `${currentIndex + 1} / ${flashCardsToLearn.length}`
+            : `0 / 0`}
+        </StyledSpan>
         {isAnswered && currentIndex < flashCardsToLearn.length - 1 ? (
           <ArrowButton onClick={() => nextFlashCard()} />
         ) : isAnswered && currentIndex === flashCardsToLearn.length - 1 ? (

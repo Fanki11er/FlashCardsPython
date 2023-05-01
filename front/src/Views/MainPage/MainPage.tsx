@@ -4,7 +4,10 @@ import { useNavigate, Navigate } from "react-router";
 import endpoints from "../../Api/endpoints";
 import MainMenu from "../../components/Organisms/MainMenu/MainMenu";
 import useAxiosPrivate from "../../Hooks/useAxiosPrivate";
-import { FlashCardsStatus } from "../../Interfaces/Interfaces";
+import {
+  FlashCardsStatus,
+  FlashCardsStatusDto,
+} from "../../Interfaces/Interfaces";
 import routes from "../../Routes/routes";
 import { MainPageWrapper, StyledError } from "./MainPage.styles";
 import useUser from "../../Hooks/useUser";
@@ -27,7 +30,7 @@ const MainPage = () => {
   const { user } = useUser();
   useEffect(() => {
     let isMounted = true;
-    //const controller = new AbortController();
+    const controller = new AbortController();
 
     const getFlashCardsInfo = async () => {
       setError("");
@@ -35,7 +38,14 @@ const MainPage = () => {
         const response = await axiosPrivate.get(statusEndpoint, {
           signal: AbortSignal.timeout(5000),
         });
-        isMounted && setFlashCardsInfo(response.data);
+        const data: FlashCardsStatusDto = response.data;
+        const convertedStatusInfo: FlashCardsStatus = {
+          allAmount: data.all_flashcards,
+          newAmount: data.new_flashcards,
+          toLearnAmount: data.to_learn_flashcards,
+        };
+
+        isMounted && setFlashCardsInfo(convertedStatusInfo);
       } catch (error: any) {
         if (error?.response) {
           setError("Błąd połączenia");
@@ -45,19 +55,19 @@ const MainPage = () => {
           setError("Błąd połączenia");
         }
 
-        navigate(login, {
+        /* navigate(login, {
           state: {
             from: location,
           },
           replace: true,
-        });
+        });*/
       }
     };
 
     getFlashCardsInfo();
     return () => {
       isMounted = false;
-      //controller.abort();
+      controller.abort();
     };
   }, [statusEndpoint, navigate, location, login, axiosPrivate, refresh]);
   return user ? (

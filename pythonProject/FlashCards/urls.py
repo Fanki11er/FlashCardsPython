@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import apiOverview, flashcardsList, createFlashcard, updateFlashcard, deleteFlashcard, checkAnswer, getFlashcardsToLearn, getStatus
+from .views import apiOverview, flashcardsList, createFlashcard, updateFlashcard, deleteFlashcard, updateProcessedFlashcard, getFlashcardsToLearn, getStatus
 
 urlpatterns = [
     path("api/", apiOverview, name='api_overview'),

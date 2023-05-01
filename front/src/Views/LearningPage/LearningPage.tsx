@@ -1,25 +1,33 @@
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
-import { useNavigate } from 'react-router';
-import endpoints from '../../Api/endpoints';
-import LoadingError from '../../components/Molecules/LoadingError/LoadingError';
-import LoadingFlashCards from '../../components/Molecules/LoadingFlashCards/LoadingFlashCards';
-import LearningSection from '../../components/Organisms/LearnSection/LearnSection';
-import useAxiosPrivate from '../../Hooks/useAxiosPrivate';
-import { FlashCard } from '../../Interfaces/Interfaces';
-import routes from '../../Routes/routes';
-import { InformationField, InfoWrapper, LearningPageWrapper, NothingToLearn } from './LearningPage.styles';
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
+import { useNavigate } from "react-router";
+import endpoints from "../../Api/endpoints";
+import LoadingError from "../../components/Molecules/LoadingError/LoadingError";
+import LoadingFlashCards from "../../components/Molecules/LoadingFlashCards/LoadingFlashCards";
+import LearningSection from "../../components/Organisms/LearnSection/LearnSection";
+import useAxiosPrivate from "../../Hooks/useAxiosPrivate";
+import { FlashCard, FlashCardDto } from "../../Interfaces/Interfaces";
+import routes from "../../Routes/routes";
+import {
+  InformationField,
+  InfoWrapper,
+  LearningPageWrapper,
+  NothingToLearn,
+} from "./LearningPage.styles";
+import useHelpers from "../../Hooks/useHelpers";
 
 const LearningPage = () => {
   const { learnEndpoint, updateLearnedFlashCardEndpoint } = endpoints;
   const { login } = routes;
   const [flashCardsToLearn, setFlashCardsToLearn] = useState<FlashCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isError, setError] = useState('');
+  const [isError, setError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const [refresh, setRefresh] = useState(false);
   const axiosPrivate = useAxiosPrivate();
+
+  const { convertToFlashCards, convertToFlashcardDto } = useHelpers();
 
   useEffect(() => {
     let isMounted = true;
@@ -27,21 +35,23 @@ const LearningPage = () => {
 
     const getLearnPortion = async () => {
       setIsLoading(true);
-      setError('');
+      setError("");
       try {
         const response = await axiosPrivate.get(learnEndpoint, {
-          signal: controller.signal,
+          signal: AbortSignal.timeout(5000),
         });
-        isMounted && setFlashCardsToLearn(response.data);
+
+        const data: FlashCardDto[] = response.data;
+        const convertedToFlashcards = convertToFlashCards(data);
+        isMounted && setFlashCardsToLearn(convertedToFlashcards);
         setIsLoading(false);
-        console.log(response.data);
       } catch (error: any) {
         if (!error?.response) {
-          setError('Błąd połączenia');
+          setError("Błąd połączenia");
         } else if (error.response?.status === 401) {
-          setError('Brak autoryzacji');
+          setError("Brak autoryzacji");
         } else {
-          setError('Błąd pobierania');
+          setError("Błąd pobierania");
         }
         setIsLoading(false);
       }
@@ -55,17 +65,22 @@ const LearningPage = () => {
   }, [navigate, location, login, axiosPrivate, learnEndpoint, refresh]);
 
   const updateFlashCard = async (flashCard: FlashCard) => {
+    const flashcardDto = convertToFlashcardDto(flashCard);
     try {
-      await axiosPrivate.post(updateLearnedFlashCardEndpoint, JSON.stringify(flashCard), {
-        headers: { 'Content-Type': 'application/json' },
-      });
+      await axiosPrivate.post(
+        updateLearnedFlashCardEndpoint(flashcardDto.id),
+        JSON.stringify(flashcardDto),
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
     } catch (error: any) {
       if (!error?.response) {
-        setError('Błąd połączenia');
+        setError("Błąd połączenia");
       } else if (error.response?.status === 401) {
-        setError('Brak autoryzacji');
+        setError("Brak autoryzacji");
       } else {
-        setError('Błąd aktualizacji');
+        setError("Błąd aktualizacji");
       }
     }
   };
@@ -79,7 +94,11 @@ const LearningPage = () => {
         <LoadingFlashCards />
       ) : !isError ? (
         flashCardsToLearn.length ? (
-          <LearningSection flashCardsToLearn={flashCardsToLearn} updateFlashCard={updateFlashCard} refresh={refreshFlashCards} />
+          <LearningSection
+            flashCardsToLearn={flashCardsToLearn}
+            updateFlashCard={updateFlashCard}
+            refresh={refreshFlashCards}
+          />
         ) : (
           <InfoWrapper>
             <NothingToLearn />

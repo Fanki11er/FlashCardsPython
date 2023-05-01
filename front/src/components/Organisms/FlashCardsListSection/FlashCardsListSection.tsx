@@ -1,12 +1,16 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import endpoints from '../../../Api/endpoints';
-import useAxiosPrivate from '../../../Hooks/useAxiosPrivate';
-import { FlashCard } from '../../../Interfaces/Interfaces';
-import { FilterInput } from '../../Atoms/FilterInput/FilterInput';
-import { FormError } from '../../Atoms/FormError/FormError';
-import { StyledConnectionInfo } from '../EditFlashCardForm/EditFlashCardForm.styled';
-import FlashCardsList from '../FlashCardsList/FlashCardsList';
-import { FlashCardsListSectionWrapper, UpdatePerson } from './FlashCardsListSection.styles';
+import { ChangeEvent, useEffect, useState } from "react";
+import endpoints from "../../../Api/endpoints";
+import useAxiosPrivate from "../../../Hooks/useAxiosPrivate";
+import { FlashCard, FlashCardDto } from "../../../Interfaces/Interfaces";
+import { FilterInput } from "../../Atoms/FilterInput/FilterInput";
+import { FormError } from "../../Atoms/FormError/FormError";
+import { StyledConnectionInfo } from "../EditFlashCardForm/EditFlashCardForm.styled";
+import FlashCardsList from "../FlashCardsList/FlashCardsList";
+import {
+  FlashCardsListSectionWrapper,
+  UpdatePerson,
+} from "./FlashCardsListSection.styles";
+import useHelpers from "../../../Hooks/useHelpers";
 interface Props {
   openModal: (flashCard: FlashCard) => void;
 }
@@ -17,9 +21,11 @@ const FlashCardsListSection = (props: Props) => {
   const [flashCards, setFlashCards] = useState<FlashCard[]>([]);
   const [filteredFlashCards, setFilteredFlashCards] = useState<FlashCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isError, setError] = useState('');
+  const [isError, setError] = useState("");
   const axiosPrivate = useAxiosPrivate();
-  const [keyword, setKeyWord] = useState('');
+  const [keyword, setKeyWord] = useState("");
+
+  const { convertToFlashCards } = useHelpers();
 
   const search = (e: ChangeEvent<HTMLInputElement>) => {
     setTimeout(() => {
@@ -28,10 +34,12 @@ const FlashCardsListSection = (props: Props) => {
   };
 
   useEffect(() => {
-    const reg = keyword ? new RegExp(keyword.toLowerCase()) : '';
+    const reg = keyword ? new RegExp(keyword.toLowerCase()) : "";
     const filter = () => {
       const results = flashCards.filter((flashCard: FlashCard) => {
-        return `${flashCard.frontText} ${flashCard.backText}`.toLowerCase().match(reg);
+        return `${flashCard.frontText} ${flashCard.backText}`
+          .toLowerCase()
+          .match(reg);
       });
       setFilteredFlashCards(results);
     };
@@ -43,21 +51,24 @@ const FlashCardsListSection = (props: Props) => {
 
     const getFlashCards = async () => {
       setIsLoading(true);
-      setError('');
+      setError("");
 
       try {
         const response = await axiosPrivate.get(allFlashCards, {
-          signal: controller.signal,
+          //signal: controller.signal,
+          signal: AbortSignal.timeout(5000),
         });
-        isMounted && setFlashCards(response.data);
+        const flashCards = convertToFlashCards(response.data as FlashCardDto[]);
+        isMounted && setFlashCards(flashCards);
         setIsLoading(false);
       } catch (error: any) {
+        console.log(error);
         if (!error?.response) {
-          setError('Błąd połączenia');
+          setError("Błąd połączenia");
         } else if (error.response?.status === 401) {
-          setError('Brak autoryzacji');
+          setError("Brak autoryzacji");
         } else {
-          setError('Błąd ładowania');
+          setError("Błąd ładowania");
         }
         setIsLoading(false);
         /*navigate(login, {
@@ -78,8 +89,19 @@ const FlashCardsListSection = (props: Props) => {
 
   return (
     <FlashCardsListSectionWrapper>
-      <FilterInput placeholder="Filter" type="search" onChange={(e) => search(e)} />
-      {isLoading ? <StyledConnectionInfo /> : <FlashCardsList flashCards={keyword ? filteredFlashCards : flashCards} openModal={openModal} />}
+      <FilterInput
+        placeholder="Filter"
+        type="search"
+        onChange={(e) => search(e)}
+      />
+      {isLoading ? (
+        <StyledConnectionInfo />
+      ) : (
+        <FlashCardsList
+          flashCards={keyword ? filteredFlashCards : flashCards}
+          openModal={openModal}
+        />
+      )}
       {isError ? <FormError>{isError}</FormError> : null}
       <UpdatePerson />
     </FlashCardsListSectionWrapper>

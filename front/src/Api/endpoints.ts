@@ -5,15 +5,15 @@ const endpoints = {
   refreshToken: "/login/refresh/",
   statusEndpoint: "/flashcards/Status/",
   getUser: "/me/",
-  //Not tested
   createFlashCardEndpoint: "/flashcards/Create/",
-  learnEndpoint: "/flashcards/Learn/",
   allFlashCards: "/flashcards/All/",
+  learnEndpoint: "/flashcards/Learn/",
+  updateLearnedFlashCardEndpoint: (id: number) => `/flashcards/Check/${id}/`,
+  //Not tested
   // Probably for change
   flashCardEditEndpoint: "/flashcards/Update/",
   settingsEndpoint: "/account/Settings",
   deleteFlashCardEndpoint: "/flashcards/Delete",
-  updateLearnedFlashCardEndpoint: "/FlashCards/Learn/Update",
 };
 
 export default endpoints;

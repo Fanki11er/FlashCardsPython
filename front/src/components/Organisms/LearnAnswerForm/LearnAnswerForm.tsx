@@ -1,6 +1,6 @@
-import { Formik } from 'formik';
-import { DefaultButton } from '../../Atoms/Buttons/Buttons';
-import { AnswerInput, StyledLearnAnswerForm } from './LearnAnswerForm.styles';
+import { Formik } from "formik";
+import { DefaultButton } from "../../Atoms/Buttons/Buttons";
+import { AnswerInput, StyledLearnAnswerForm } from "./LearnAnswerForm.styles";
 
 interface Props {
   checkAnswer: (answer: string) => void;
@@ -13,7 +13,7 @@ interface MyFormValues {
 
 const LearnAnswerForm = (props: Props) => {
   const { checkAnswer, flashCards } = props;
-  const initialValues: MyFormValues = { answer: '' };
+  const initialValues: MyFormValues = { answer: "" };
 
   return (
     <Formik
@@ -25,8 +25,17 @@ const LearnAnswerForm = (props: Props) => {
       }}
     >
       <StyledLearnAnswerForm>
-        <AnswerInput name="answer" placeholder="Odpowiedź" autocomplete="off" autoFocus={true} />
-        <DefaultButton className={!flashCards ? 'disable' : ''} type="submit" disabled={!flashCards ? true : false}>
+        <AnswerInput
+          name="answer"
+          placeholder="Odpowiedź"
+          autoComplete="off"
+          autoFocus={true}
+        />
+        <DefaultButton
+          className={!flashCards ? "disable" : ""}
+          type="submit"
+          disabled={!flashCards ? true : false}
+        >
           Sprawdź
         </DefaultButton>
       </StyledLearnAnswerForm>
