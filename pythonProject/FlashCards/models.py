@@ -5,7 +5,8 @@ import datetime
 
 STATUSES = (
     ("NEW", "Card not learned"),
-    ("LEARNED", "Card learned")
+    ("LEARNT", "Card learned"),
+    ("LEARN", "Card to learn")
 )
 
 class FlashCard(models.Model):

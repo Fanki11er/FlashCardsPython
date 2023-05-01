@@ -7,7 +7,7 @@ urlpatterns = [
     path("Create/", createFlashcard, name='flashcards-create'),
     path("Update/<str:pk>/", updateFlashcard, name='flashcards-update'),
     path("Delete/<str:pk>/", deleteFlashcard, name='flashcards-delete'),
-    path("Check/<str:pk>/", checkAnswer, name='flashcards-check'),
+    path("Check/<str:pk>/", updateProcessedFlashcard, name='flashcards-check'),
     path("Learn/", getFlashcardsToLearn, name='flashcards-to-learn'),
     path("Status/", getStatus, name='flashcards-status')
 ]
