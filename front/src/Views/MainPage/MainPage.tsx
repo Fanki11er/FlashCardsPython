@@ -28,7 +28,9 @@ const MainPage = () => {
   const axiosPrivate = useAxiosPrivate();
   const [isError, setError] = useState("");
   const { user } = useUser();
+
   useEffect(() => {
+    console.log("STATUS");
     let isMounted = true;
     const controller = new AbortController();
 
@@ -69,14 +71,14 @@ const MainPage = () => {
       isMounted = false;
       controller.abort();
     };
-  }, [statusEndpoint, navigate, location, login, axiosPrivate, refresh]);
-  return user ? (
-    <MainPageWrapper>
-      {isError ? <StyledError /> : null}
-      <MainMenu flashCardsInfo={flashCardsInfo} />
-    </MainPageWrapper>
-  ) : (
-    <Navigate to={login} />
+  }, []);
+  return (
+    user && (
+      <MainPageWrapper>
+        {isError ? <StyledError /> : null}
+        <MainMenu flashCardsInfo={flashCardsInfo} />
+      </MainPageWrapper>
+    )
   );
 };
 export default MainPage;

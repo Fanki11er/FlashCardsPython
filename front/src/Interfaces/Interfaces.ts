@@ -3,12 +3,18 @@ export interface UserSettings {
   maximumBreak: number;
   percentNew: number;
 }
-export interface AuthUser {
+
+export interface UserSettingsDto {
+  daily_flashcards: number;
+  maximum_break: number;
+  percent_new: number;
+}
+/*export interface AuthUser {
   id: number;
   name: string;
   settings: UserSettings;
   accessToken?: string;
-}
+}*/
 
 export interface FlashCardsStatus {
   allAmount: number;

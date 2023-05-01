@@ -1,4 +1,3 @@
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -49,7 +48,7 @@ def createFlashcard(request):
         reversedFlashcard.back_text = serializer.validated_data.get('front_text')
         reversedFlashcard.user = user
         reversedFlashcard.save()
-        
+
         return Response("Created", status="200")
     return Response(None, status="400")
 
@@ -129,15 +128,3 @@ def getStatus(request):
     serializer = StatusSerializer(status)
     return Response(serializer.data)
     
-
-
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# def createFlashcard(request):
-#     user = User.objects.filter(id = request.user.id).first()
-#     if(user):     
-#       serializer = FlashcardsSerializer(data=request.data, partial=True)
-#       if serializer.is_valid():
-#         serializer.save(user = user)
-#         return Response("Created", status="200")
-#     return Response(None, status="400")

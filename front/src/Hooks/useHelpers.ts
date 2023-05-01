@@ -1,4 +1,9 @@
-import { FlashCard, FlashCardDto } from "../Interfaces/Interfaces";
+import {
+  FlashCard,
+  FlashCardDto,
+  UserSettings,
+  UserSettingsDto,
+} from "../Interfaces/Interfaces";
 
 const useHelpers = () => {
   const convertToFlashCards = (data: FlashCardDto[]) => {
@@ -26,9 +31,29 @@ const useHelpers = () => {
     };
     return flashCardDto;
   };
+
+  const convertDtoToUserSettings = (settingsDto: UserSettingsDto) => {
+    const userSettings: UserSettings = {
+      dailyFlashCards: settingsDto.daily_flashcards,
+      maximumBreak: settingsDto.maximum_break,
+      percentNew: settingsDto.percent_new,
+    };
+    return userSettings;
+  };
+
+  const convertUserSettingsToDto = (userSettings: UserSettings) => {
+    const userSettingsDto: UserSettingsDto = {
+      maximum_break: userSettings.maximumBreak,
+      daily_flashcards: userSettings.dailyFlashCards,
+      percent_new: userSettings.percentNew,
+    };
+    return userSettingsDto;
+  };
   return {
     convertToFlashCards,
     convertToFlashcardDto,
+    convertDtoToUserSettings,
+    convertUserSettingsToDto,
   };
 };
 

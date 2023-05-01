@@ -12,8 +12,9 @@ const endpoints = {
   flashCardEditEndpoint: (id: number) => `/flashcards/Update/${id}/`,
   deleteFlashCardEndpoint: (id: number) => `/flashcards/Delete/${id}/`,
   //Not tested
+  getSettingsEndpoint: "/Settings/",
+  changeSettingsEndpoint: "/Settings/Change/",
   // Probably for change
-  settingsEndpoint: "/account/Settings",
 };
 
 export default endpoints;
