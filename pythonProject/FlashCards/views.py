@@ -34,10 +34,22 @@ def flashcardsList(request):
 @permission_classes([IsAuthenticated])
 def createFlashcard(request):
     user = User.objects.filter(id = request.user.id).first()
-    if(user):     
+    if(user):
+     
       serializer = FlashcardsSerializer(data=request.data, partial=True)
       if serializer.is_valid():
-        serializer.save(user = user)
+        flashcard = FlashCard()
+        flashcard.front_text = serializer.validated_data.get('front_text')
+        flashcard.back_text = serializer.validated_data.get('back_text')
+        flashcard.user = user
+        flashcard.save()
+
+        reversedFlashcard = FlashCard()
+        reversedFlashcard.front_text = serializer.validated_data.get('back_text')
+        reversedFlashcard.back_text = serializer.validated_data.get('front_text')
+        reversedFlashcard.user = user
+        reversedFlashcard.save()
+        
         return Response("Created", status="200")
     return Response(None, status="400")
 
@@ -117,3 +129,15 @@ def getStatus(request):
     serializer = StatusSerializer(status)
     return Response(serializer.data)
     
+
+
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def createFlashcard(request):
+#     user = User.objects.filter(id = request.user.id).first()
+#     if(user):     
+#       serializer = FlashcardsSerializer(data=request.data, partial=True)
+#       if serializer.is_valid():
+#         serializer.save(user = user)
+#         return Response("Created", status="200")
+#     return Response(None, status="400")
