@@ -3,7 +3,6 @@ import UserProvider from "../../../Providers/AuthProvider";
 import routes from "../../../Routes/routes";
 
 const RequireAuth = () => {
-  console.log("REQUIRED");
   const { login } = routes;
 
   const token = sessionStorage.getItem("access");
@@ -18,7 +17,3 @@ const RequireAuth = () => {
 };
 
 export default RequireAuth;
-/*
-<MyErrorBoundary>
-</MyErrorBoundary>
-*/

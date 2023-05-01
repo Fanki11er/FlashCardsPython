@@ -1,37 +1,43 @@
-import Logo, { Test } from '../../Atoms/Logo/Logo';
-import { NavigationButton } from '../../Atoms/NavigationButton/NavigationButton';
-import { ButtonsWrapper, NavigationWrapper, StyledWrapper } from './Navigation.styles';
-import routes from '../../../Routes/routes';
-import { useLocation } from 'react-router';
-import UserPicture from '../../Atoms/UserPicture/UserPicture';
-import useAuth from '../../../Hooks/useAuth';
+import Logo, { Test } from "../../Atoms/Logo/Logo";
+import { NavigationButton } from "../../Atoms/NavigationButton/NavigationButton";
+import {
+  ButtonsWrapper,
+  NavigationWrapper,
+  StyledWrapper,
+} from "./Navigation.styles";
+import routes from "../../../Routes/routes";
+import { useLocation } from "react-router";
+import UserPicture from "../../Atoms/UserPicture/UserPicture";
+import useUser from "../../../Hooks/useUser";
 
 const Navigation = () => {
   const { login, registration, main, learn, maintenance, settings } = routes;
 
-  const { auth, setAuth } = useAuth();
+  const { handleSetUser, user } = useUser();
 
   const { pathname } = useLocation();
   return (
     <NavigationWrapper>
-      <Test to={'/'}>
+      <Test to={"/"}>
         <Logo />
       </Test>
       <StyledWrapper>
-        {auth?.name && auth?.accessToken ? <UserPicture userName={auth.name} /> : null}
-        {pathname === '/' && (
+        {user?.username ? <UserPicture userName={user.username} /> : null}
+        {pathname === "/" && (
           <ButtonsWrapper>
-            {auth?.accessToken ? (
+            {user?.username ? (
               <>
                 <NavigationButton to={main}>Menu</NavigationButton>
-                <NavigationButton to="/" onClick={() => setAuth(undefined)}>
+                <NavigationButton to="/" onClick={() => handleSetUser(null)}>
                   Wyloguj
                 </NavigationButton>
               </>
             ) : (
               <>
                 <NavigationButton to={login}>Zaloguj</NavigationButton>
-                <NavigationButton to={registration}>Rejestracja</NavigationButton>
+                <NavigationButton to={registration}>
+                  Rejestracja
+                </NavigationButton>
               </>
             )}
           </ButtonsWrapper>
@@ -48,9 +54,11 @@ const Navigation = () => {
             <NavigationButton to="/">Powrót</NavigationButton>
           </ButtonsWrapper>
         )}
-        {(pathname === learn || pathname === maintenance || pathname === settings) && (
+        {(pathname === learn ||
+          pathname === maintenance ||
+          pathname === settings) && (
           <ButtonsWrapper>
-            <NavigationButton to="/" onClick={() => setAuth(undefined)}>
+            <NavigationButton to="/" onClick={() => handleSetUser(null)}>
               Wyloguj
             </NavigationButton>
             <NavigationButton to={main}>Menu</NavigationButton>
@@ -59,7 +67,7 @@ const Navigation = () => {
 
         {pathname === main && (
           <ButtonsWrapper>
-            <NavigationButton to="/" onClick={() => setAuth(undefined)}>
+            <NavigationButton to="/" onClick={() => handleSetUser(null)}>
               Wyloguj
             </NavigationButton>
           </ButtonsWrapper>

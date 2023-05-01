@@ -4,7 +4,6 @@ import endpoints from "../Api/endpoints";
 import useAuth from "../Hooks/useAuth";
 import useAxiosPrivate from "../Hooks/useAxiosPrivate";
 import useLoader from "../Hooks/useLoader";
-//import { owner } from "../Mocks/UserMocks";
 import { Status, User } from "../Types/types";
 import { UserSettings, UserSettingsDto } from "../Interfaces/Interfaces";
 import useHelpers from "../Hooks/useHelpers";
@@ -12,7 +11,7 @@ import useHelpers from "../Hooks/useHelpers";
 interface UserContextInterface {
   user: User | null;
   userSettings: UserSettings | null;
-  handleSetUser: (user: User) => void;
+  handleSetUser: (user: User | null) => void;
   handleSetUserSettings: (userSettings: UserSettings) => void;
   handleLogout: () => void;
   status: Status;
@@ -23,7 +22,7 @@ export const UserContext = createContext<UserContextInterface>({
   user: null,
   userSettings: null,
   // eslint-disable-next-line
-  handleSetUser: (user: User) => {},
+  handleSetUser: (user: User | null) => {},
   // eslint-disable-next-line
   handleSetUserSettings: (userSettings: UserSettings) => {},
   // eslint-disable-next-line
@@ -34,39 +33,14 @@ export const UserContext = createContext<UserContextInterface>({
 
 const UserProvider = (props: PropsWithChildren) => {
   const { children } = props;
-  const { getUser, getSettingsEndpoint } = endpoints;
+  const { getSettingsEndpoint } = endpoints;
   const [user, setUser] = useState<User | null>(null);
   const [userSettings, setUserSettings] = useState<UserSettings | null>(null);
   const { status, startLoading, finishedLoading, handleError, error } =
     useLoader();
-  const { getAccessFromStorage, handleDeleteTokens } = useAuth();
+  const { handleDeleteTokens } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const { convertDtoToUserSettings } = useHelpers();
-
-  useEffect(() => {
-    const access = getAccessFromStorage();
-    if (!user && access) {
-      startLoading();
-      axiosPrivate
-        .get(getUser)
-        .then((response: AxiosResponse) => {
-          const user: User | undefined = response.data;
-
-          if (user) {
-            setUser({
-              username: user.username,
-            });
-          }
-          finishedLoading();
-        })
-        .catch((e: AxiosError) => {
-          const data = e.response?.data as any;
-          handleError(data?.messages[0]?.message);
-          console.log(data?.messages[0]?.message);
-        });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     if (user && !userSettings) {
@@ -90,7 +64,7 @@ const UserProvider = (props: PropsWithChildren) => {
     }
   }, [user]);
 
-  const handleSetUser = (user: User) => {
+  const handleSetUser = (user: User | null) => {
     setUser(user);
   };
 
