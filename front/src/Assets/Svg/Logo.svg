@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="225" height="156" viewBox="0 0 225 156">
+  <defs>
+    <linearGradient id="linear-gradient" y1="0.028" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#2d238d"/>
+      <stop offset="1" stop-color="#2d3793"/>
+    </linearGradient>
+  </defs>
+  <g id="Group_13" data-name="Group 13" transform="translate(-63 -60)">
+    <rect id="Rectangle_18" data-name="Rectangle 18" width="225" height="156" transform="translate(63 60)" fill="url(#linear-gradient)"/>
+    <g id="Group_12" data-name="Group 12" transform="translate(1804.56 -1924) rotate(90)">
+      <path id="Path_41" data-name="Path 41" d="M10.819,0H95.206a10.819,10.819,0,0,1,10.819,10.819V164.448a10.819,10.819,0,0,1-10.819,10.819H10.819A10.819,10.819,0,0,1,0,164.448V10.819A10.819,10.819,0,0,1,10.819,0Z" transform="translate(1989 1525)" fill="rgba(255,152,0,0.51)"/>
+      <path id="Path_40" data-name="Path 40" d="M10.819,0H95.206a10.819,10.819,0,0,1,10.819,10.819v154.71a10.819,10.819,0,0,1-10.819,10.819H10.819A10.819,10.819,0,0,1,0,165.529V10.819A10.819,10.819,0,0,1,10.819,0Z" transform="translate(2004.146 1537.983)" fill="rgba(255,152,0,0.51)"/>
+      <rect id="Rectangle_10" data-name="Rectangle 10" width="108" height="175" rx="10" transform="translate(2020 1555.559)" fill="rgba(255,152,0,0.24)"/>
+    </g>
+    <text id="FlashCards" transform="translate(90 157)" fill="#2d3c95" font-size="25" font-family="Montserrat-Black, Montserrat" font-weight="800"><tspan x="0" y="0">FlashCards</tspan></text>
+  </g>
+</svg>

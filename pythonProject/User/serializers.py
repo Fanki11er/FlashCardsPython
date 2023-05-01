@@ -17,4 +17,7 @@ class StatusSerializer(serializers.ModelSerializer):
         model = Status
         fields = ('all_flashcards', 'new_flashcards','to_learn_flashcards')
 
-  
+class UserSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserSettings
+        fields = '__all__'
