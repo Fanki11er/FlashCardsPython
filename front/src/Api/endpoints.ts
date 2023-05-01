@@ -9,11 +9,11 @@ const endpoints = {
   allFlashCards: "/flashcards/All/",
   learnEndpoint: "/flashcards/Learn/",
   updateLearnedFlashCardEndpoint: (id: number) => `/flashcards/Check/${id}/`,
+  flashCardEditEndpoint: (id: number) => `/flashcards/Update/${id}/`,
+  deleteFlashCardEndpoint: (id: number) => `/flashcards/Delete/${id}/`,
   //Not tested
   // Probably for change
-  flashCardEditEndpoint: "/flashcards/Update/",
   settingsEndpoint: "/account/Settings",
-  deleteFlashCardEndpoint: "/flashcards/Delete",
 };
 
 export default endpoints;

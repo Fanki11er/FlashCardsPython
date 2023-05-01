@@ -117,34 +117,3 @@ def getStatus(request):
     serializer = StatusSerializer(status)
     return Response(serializer.data)
     
-
-
-
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# def checkAnswer(request, pk):
-#     flashcard = FlashCard.objects.get(id=pk)
-#     settings = UserSettings.objects.filter(user_id = request.user.id).first()
-#     if(flashcard & settings):
-#       if(flashcard.back_text ==  request.data.get('answer')):
-#          flashcard.correct_at_row += 1
-#          next_session_period = flashcard.correct_at_row * 3
-         
-#          if(next_session_period >= settings.maximum_break):
-#           flashcard.next_session = datetime.date.today() + datetime.timedelta(days=settings.maximum_break)
-#          else:
-#             flashcard.next_session = datetime.date.today() + datetime.timedelta(days=next_session_period)
-
-#          serializer = FlashcardsSerializer( instance=flashcard ,data=request.data, partial=True)
-#          if serializer.is_valid():
-#             serializer.save()
-#             return Response(True, status="200")
-#       else:
-#          flashcard.correct_at_row = 0
-#          flashcard.next_session =  datetime.date.today() + datetime.timedelta(days=1)
-#          serializer = FlashcardsSerializer( instance=flashcard ,data=request.data, partial=True)
-#          if serializer.is_valid():
-#             serializer.save()
-#             return Response(False, status="200")
-
-#     return Response(None, status="400")

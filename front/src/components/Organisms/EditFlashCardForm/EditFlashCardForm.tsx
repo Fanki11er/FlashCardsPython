@@ -1,13 +1,23 @@
-import { Formik } from 'formik';
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
-import endpoints from '../../../Api/endpoints';
-import useAxiosPrivate from '../../../Hooks/useAxiosPrivate';
-import { FlashCard } from '../../../Interfaces/Interfaces';
-import routes from '../../../Routes/routes';
-import { CancelButton, DefaultButton, DeleteButton } from '../../Atoms/Buttons/Buttons';
-import { ButtonsWrapper, EditFlashCardsInput, InputWrapper, StyledConnectionInfo, StyledEditFlashCardsForm } from './EditFlashCardForm.styled';
+import { Formik } from "formik";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import endpoints from "../../../Api/endpoints";
+import useAxiosPrivate from "../../../Hooks/useAxiosPrivate";
+import { FlashCard } from "../../../Interfaces/Interfaces";
+import routes from "../../../Routes/routes";
+import {
+  CancelButton,
+  DefaultButton,
+  DeleteButton,
+} from "../../Atoms/Buttons/Buttons";
+import {
+  ButtonsWrapper,
+  EditFlashCardsInput,
+  InputWrapper,
+  StyledConnectionInfo,
+  StyledEditFlashCardsForm,
+} from "./EditFlashCardForm.styled";
 
 interface MyFormValues {
   frontText: string;
@@ -21,14 +31,22 @@ interface Props {
 
 const EditFlashCardsForm = (props: Props) => {
   const { flashCard, closeModal } = props;
-  const initialValues: MyFormValues = { frontText: flashCard ? flashCard.frontText : '', backText: flashCard ? flashCard.backText : '' };
+  const initialValues: MyFormValues = {
+    frontText: flashCard ? flashCard.frontText : "",
+    backText: flashCard ? flashCard.backText : "",
+  };
   const { flashCardEditEndpoint, deleteFlashCardEndpoint } = endpoints;
   const { main, maintenance } = routes;
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
   const [isSending, setIsSending] = useState(false);
   const handleSubmit = async (values: MyFormValues) => {
-    if (!values.frontText || !values.backText || (flashCard.frontText === values.frontText && flashCard.backText === values.backText)) {
+    if (
+      !values.frontText ||
+      !values.backText ||
+      (flashCard.frontText === values.frontText &&
+        flashCard.backText === values.backText)
+    ) {
       closeModal();
       return;
     }
@@ -36,15 +54,15 @@ const EditFlashCardsForm = (props: Props) => {
     try {
       const { frontText, backText } = values;
       await axiosPrivate.post(
-        flashCardEditEndpoint,
+        flashCardEditEndpoint(flashCard.id),
         JSON.stringify({
-          FrontText: frontText,
-          BackText: backText,
-          Id: flashCard.id,
+          front_text: frontText,
+          back_text: backText,
+          id: flashCard.id,
         }),
         {
-          headers: { 'Content-Type': 'application/json' },
-        },
+          headers: { "Content-Type": "application/json" },
+        }
       );
       setTimeout(() => {
         navigate(main, {
@@ -64,17 +82,9 @@ const EditFlashCardsForm = (props: Props) => {
   const deleteFlashCard = () => {
     setIsSending(true);
     try {
-      axiosPrivate.post(
-        deleteFlashCardEndpoint,
-        JSON.stringify({
-          FrontText: flashCard.frontText,
-          BackText: flashCard.backText,
-          Id: flashCard.id,
-        }),
-        {
-          headers: { 'Content-Type': 'application/json' },
-        },
-      );
+      axiosPrivate.delete(deleteFlashCardEndpoint(flashCard.id), {
+        headers: { "Content-Type": "application/json" },
+      });
 
       setTimeout(() => {
         navigate(main, {
@@ -106,15 +116,31 @@ const EditFlashCardsForm = (props: Props) => {
         ) : (
           <>
             <InputWrapper>
-              <EditFlashCardsInput name="frontText" placeholder="Przód karty" label="" autocomplete="off" />
+              <EditFlashCardsInput
+                name="frontText"
+                placeholder="Przód karty"
+                label=""
+                autocomplete="off"
+              />
             </InputWrapper>
             <InputWrapper>
-              <EditFlashCardsInput name="backText" placeholder="Tył karty" label="" autocomplete="off"/>
+              <EditFlashCardsInput
+                name="backText"
+                placeholder="Tył karty"
+                label=""
+                autocomplete="off"
+              />
             </InputWrapper>
             <ButtonsWrapper>
               <DefaultButton type="submit">Edytuj</DefaultButton>
-              <DeleteButton onClick={() => deleteFlashCard()}>Usuń</DeleteButton>
-              <CancelButton as={Link} to={maintenance} onClick={() => closeModal()}>
+              <DeleteButton onClick={() => deleteFlashCard()}>
+                Usuń
+              </DeleteButton>
+              <CancelButton
+                as={Link}
+                to={maintenance}
+                onClick={() => closeModal()}
+              >
                 Anuluj
               </CancelButton>
             </ButtonsWrapper>
