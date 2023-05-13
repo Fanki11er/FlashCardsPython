@@ -1,9 +1,14 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-#from django.contrib.auth.models import User
 class User(AbstractUser):
-    friends = models.ManyToManyField("User", blank=True)
+    was_active_today: models.BooleanField(default=False)
+    good_answers_in_period: models.PositiveIntegerField(default=0)
+    wrong_answers_in_period: models.PositiveIntegerField(default=0)
+    new_flashcards_in_period: models.PositiveIntegerField(default=0)
+    all_user_flashcards: models.PositiveIntegerField(default=0)
+
+    
 
 class UserSettings(models.Model):
     daily_flashcards = models.PositiveIntegerField(default=25)

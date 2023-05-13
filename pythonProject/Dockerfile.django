@@ -1,0 +1,14 @@
+# Base image
+FROM python:3.9
+
+# Set environment variables
+ENV PYTHONUNBUFFERED 1
+
+# Install dependencies
+COPY requirements.txt /code/
+RUN pip install --no-cache-dir -r /code/requirements.txt
+
+# Copy project files
+COPY . /code/
+WORKDIR /code/
+
