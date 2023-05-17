@@ -1,9 +1,9 @@
-# #from User.models import User
 from django.contrib.auth import get_user_model
 from apscheduler.schedulers.background import BackgroundScheduler
 import sendgrid
 from sendgrid.helpers.mail import Mail
 from django.conf import settings
+from twilio.rest import Client
 
 def job_user_statistics(user):
     
@@ -33,8 +33,15 @@ def job_user_statistics(user):
     user.all_user_flashcards = 0
 
 def job_send_reminder(user):
-     print(f"User: {user.username}")
-     print("Remember to do some flashcards today")
+        account_sid = settings.TWILIO_ACCOUNT_SID
+        auth_token = settings.TWILIO_AUTH_TOKEN
+        client = Client(account_sid, auth_token)
+
+        client.messages.create(
+            body=f'Hey {user.username} remember to practice your language skills today!',
+            from_= settings.TWILIO_NUMBER,
+            to=settings.MY_NUMBER
+        )
 
 
 def execute_send_stats_for_all_users():
@@ -65,7 +72,8 @@ def execute_send_reminder_to_users():
 
 def start():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(execute_send_stats_for_all_users, "interval", minutes=1, id="stats", replace_existing=True)
-    #scheduler.add_job(execute_send_reminder_to_users, "interval", minutes=1, id="reminders", replace_existing=True)
+    scheduler.add_job(execute_send_stats_for_all_users, "interval", minutes=2, id="stats", replace_existing=True)
+    scheduler.add_job(execute_send_reminder_to_users, "interval", minutes=3, id="reminders", replace_existing=True)
     scheduler.start()
+    
     
