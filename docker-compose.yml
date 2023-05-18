@@ -1,31 +1,39 @@
 version: '3'
+
 services:
-  django:
-    build:
-    context: ./PythonProject
-    container_name: Django
+  db:
+    image: postgres
+    env_file:
+      - ./pythonProject/.env
     volumes:
-      - .:/code/
+      - postgres_data:/var/lib/postgresql/data
     ports:
-      - '8080:8080'
-    environment:
-      - CELERY_BROKER=redis://redis:6379/0
-      - CELERY_BACKEND=redis://redis:6379/0
+      - "5432:5432"
+
+  web:
+    build:
+      context: ./pythonProject
+      dockerfile: Dockerfile.django
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver --noreload 0.0.0.0:8000"
+    volumes:
+      - ./pythonProject:/code
+    ports:
+      - "8000:8000"
     depends_on:
-      - redis
-      - pgdb
-    command: python manage.py runserver 0.0.0.0:8080
-  
-  celery:
-    build: .
-    command: celery worker --app=pythonProject --loglevel=info
+      - db
+    env_file:
+      - ./pythonProject/.env
 
+  frontend:
+    build:
+      context: ./front
+      dockerfile: Dockerfile.front
+    ports:
+      - "5173:5173"
+    depends_on:
+      - web
 
-
-    # celery:
-    #   build:
-    #   context: .
-    #   dockerfile: Dockerfile.redis_celery
-    #   networks:
-    #   - project_python
-    # command: bash -c "redis-server --daemonize yes && celery -A pythonProject worker --loglevel=info"
+volumes:
+  postgres_data:
