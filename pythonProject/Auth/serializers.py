@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from User.models import User, UserSettings
+from User.models import UserSettings, User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from django.db import transaction
@@ -34,5 +34,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             user.save()
             user_settings = UserSettings.objects.create(user=user)
             user_settings.save()
+        
 
         return user

@@ -1,0 +1,14 @@
+FROM node:alpine
+
+WORKDIR /app
+
+COPY package.json .
+
+RUN npm install
+RUN npm install --arch=linux-x64 --platform=linux esbuild
+
+COPY . .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev"]

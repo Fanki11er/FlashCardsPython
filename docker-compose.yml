@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    env_file:
+      - ./pythonProject/.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web:
+    build:
+      context: ./pythonProject
+      dockerfile: Dockerfile.django
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver --noreload 0.0.0.0:8000"
+    volumes:
+      - ./pythonProject:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - ./pythonProject/.env
+
+  frontend:
+    build:
+      context: ./front
+      dockerfile: Dockerfile.front
+    ports:
+      - "5173:5173"
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:

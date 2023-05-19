@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "rest_framework_simplejwt",
     "corsheaders",
+
 ]
 
 
@@ -56,7 +58,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware'
+    'corsheaders.middleware.CorsMiddleware',
+
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
@@ -86,10 +89,15 @@ WSGI_APPLICATION = 'pythonProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('POSTGRES_DB'),
+        'USER': config('POSTGRES_USER'),
+        'PASSWORD': config('POSTGRES_PASSWORD'),
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
@@ -152,3 +160,11 @@ SIMPLE_JWT = {
     # for dev usage only
     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
 }
+
+SENDGRID_API_KEY = config('SENDGRID_API_KEY')
+DEFAULT_FROM_EMAIL = 'dziedzic.k@hotmail.com'
+
+TWILIO_NUMBER=config('TWILIO_NUMBER')
+TWILIO_ACCOUNT_SID=config('TWILIO_ACCOUNT_SID')
+TWILIO_AUTH_TOKEN=config('TWILIO_AUTH_TOKEN')
+MY_NUMBER=config("MY_NUMBER")
